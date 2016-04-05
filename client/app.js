@@ -1,7 +1,13 @@
-angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ui.bootstrap', 'ngCookies', 'ngMaterial', 'angular-spinkit'])
-  .config(function($stateProvider, $urlRouterProvider, $authProvider, $mdThemingProvider) {
+angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ui.bootstrap', 'ngCookies', 'ngMaterial', 'angular-spinkit', 'uiGmapgoogle-maps'])
+  .config(function($stateProvider, $urlRouterProvider, $authProvider, $mdThemingProvider, uiGmapGoogleMapApiProvider) {
 
     $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow').dark();
+
+    uiGmapGoogleMapApiProvider.configure({
+        key: 'AIzaSyCwtgP3ap8vcxFVkkHwh5bhlM85Ot2YYYQ',
+        v: '3.22', //defaults to latest 3.X anyhow
+        libraries: 'geometry,visualization'
+    });
 
     $stateProvider
       .state('/', {

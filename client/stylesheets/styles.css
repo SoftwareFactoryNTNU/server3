@@ -4,6 +4,19 @@ body {
   background-color: white;
 }
 
+.angular-google-map-container {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 400px;
+    background-color: #003300;
+}
+.angular-google-map {
+    height: 400px;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
@@ -391,4 +404,20 @@ box-shadow: none !important;
   50% {
     opacity: 1;
   }
+
+}
+
+
+.angular-google-maps-container {
+    height: 400px;
+}
+
+
+
+ui-gmap-google-map {
+height: 400px;
+background-color: #003300;
+}
+ui-gmap-google-map.ng-isolate-scope.angular-google-map {
+height: 400px;
 }

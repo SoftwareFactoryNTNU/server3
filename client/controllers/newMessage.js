@@ -1,5 +1,5 @@
 angular.module('MyApp')
-  .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, uiGmapGoogleMapApi) {
+  .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, $interval, uiGmapGoogleMapApi) {
 
     if ($state.get('admin.newmessage').data != undefined) {
       $scope.data = $state.get('admin.newmessage').data;
@@ -58,6 +58,20 @@ angular.module('MyApp')
       $mdDialog.show(alert).then(cb);
     };
 
+    //                            MAP
+    // *********************************************************************
+    // // ------------------------------------------------------------------
+    /*
+            ___                          _             __  ___
+           /   |  ____ ___  ____ _____  (_)___  ____ _/  |/  /___ _____
+          / /| | / __ `__ \/ __ `/_  / / / __ \/ __ `/ /|_/ / __ `/ __ \
+         / ___ |/ / / / / / /_/ / / /_/ / / / / /_/ / /  / / /_/ / /_/ /
+        /_/  |_/_/ /_/ /_/\__,_/ /___/_/_/ /_/\__, /_/  /_/\__,_/ .___/
+                                             /____/            /_/
+
+     -----------------------------------------------------------------------
+    */
+
 
   console.log("hello");
   var cords = [[63.568138,10.295417],[63.314919,10.752056],[63.108749,11.5345],[63.086418,11.648694],[63.827442,10.371333],[62.961193,10.090278],[62.743168,9.291194],[63.122833,10.591667],[63.123749,9.443389],[63.210278,10.70875],[63.016499,10.958944],[63.163502,10.526361],[62.112194,11.48656],[63.019974,9.197861],[63.328529,11.027583],[63.390305,11.418528],[63.141998,11.722361],[63.147141,9.11575],[62.876141,9.661972],[62.821918,10.608694],[62.7085,9.800861],[62.412193,11.18656],[62.550045646,12.050345356]];
@@ -66,12 +80,19 @@ angular.module('MyApp')
 
 
 
+
   function drawTheAmazingMap(crashData) {
     // draw the map!
-    //
-    var s= "";
+    cords = [];
+    for (var i=0;i<crashData.data.length;i++) {
+      cords[i] = [ crashData.data[i].latitude, crashData.data[i].longditude ]
+    }
+    // console.log("new cords!");
+    // console.log(cords);
+    $scope.map_coordinates = cords;
 
-
+    $scope.drawNewPoly();
+    $scope.animateCar($scope.map.markers[0], cords, 50);
   }
 
   $scope.map = {
@@ -89,39 +110,36 @@ angular.module('MyApp')
     };
 
 
-    //        MAP
-    // *******************
 
       uiGmapGoogleMapApi.then(function(maps) {
         console.log("uiGmapGoogleMapApi has been loaded")
         var myLatLng = [];
-        //console.log(cords);
-        //console.log(cords[0][0]);
-        //console.log(cords[0][1]);
 
-        for (var i = 0; i < cords.length; i++) {
-              myLatLng.push(new google.maps.LatLng({lat: cords[i][0], lng: cords[i][1]}));
+        $scope.drawNewPoly = function() {
+          for (var i = 0; i < cords.length; i++) {
+                myLatLng.push(new google.maps.LatLng({lat: cords[i][0], lng: cords[i][1]}));
+          }
+
+          $scope.polylines = [
+                  {
+                      id: 1,
+                      path: myLatLng,
+                      editable: false,
+                      draggable: false,
+                      geodesic: true,
+                      visible: true,
+                      stroke: {
+                          color: '#6060FB',
+                          weight: 3
+                      },
+                      visible: true,
+                  }
+              ];
         }
-
-        $scope.polylines = [
-                {
-                    id: 1,
-                    path: myLatLng,
-                    editable: false,
-                    draggable: false,
-                    geodesic: true,
-                    visible: true,
-                    stroke: {
-                        color: '#6060FB',
-                        weight: 3
-                    },
-                    visible: true,
-                }
-            ];
-
 
         $scope.updateInfo = function(){
           //console.log("!");
+          // // the future is here in this method
         }
 
 
@@ -136,10 +154,8 @@ angular.module('MyApp')
             //var lng = marker.position.lng();
             var lat = $scope.map.markers[0].latitude;
             var lng = $scope.map.markers[0].longitude;
-            console.log(lat);
-            console.log(lng);
-
-
+            // console.log(lat);
+            // console.log(lng);
 
             var step = (km_h * 1000 * delay) / 3600000
             $scope.updateInfo();
@@ -160,17 +176,17 @@ angular.module('MyApp')
                   $scope.map.markers[0].latitude = lat;
                   $scope.map.markers[0].longitude = lng;
 
-                  first = $timeout($scope.moveMarker, delay); //setTimeout(moveMarker, delay);
+                  first = $timeout($scope.moveMarker, delay); //setTimeout(moveMarker, delay); - $timeout is setTimeout in angular
                 }
                 else{
-                  //$scope.map.markers[0].setPosition(dest);
+                  //$scope.map.markers[0].setPosition(dest); //easy method depricated because fuu
                   $scope.map.markers[0].latitude = cords[target][0];
                   $scope.map.markers[0].longitude = cords[target][1];
                   target += 1;
                   km_h = speedArray[target];
                   //updateInfo();
                   if (target == cords.length){
-                    target = 0;
+                    target = 1;
                     km_h = speedArray[0];
                     $scope.updateInfo();
                   }
@@ -182,26 +198,29 @@ angular.module('MyApp')
           $scope.goTo();
         }
 
-        $scope.animateCar($scope.map.markers[0], cords, 50);
+        /**
+         * methods for recentering the map (need to bee done periodicaly and after 1 sec(this seems to work(shit))) *
+         **/
+        $timeout(function(){
+          $scope.map.center = {latitude: $scope.map.markers[0].latitude, longitude: $scope.map.markers[0].longitude};
+        }, 1000);
+        $interval( function(){
+          $scope.map.center = {latitude: $scope.map.markers[0].latitude, longitude: $scope.map.markers[0].longitude};
+        }, 5000);
 
-
-
-        //panTo function needed!
-
+        //TESTS for geometry library
+        /*
         var start = new google.maps.LatLng(cords[0][0], cords[0][1]);
         var dest = new google.maps.LatLng(cords[1][0], cords[1][1]);
         var distance = google.maps.geometry.spherical.computeDistanceBetween(
           start, dest); //in meters
           console.log(distance);
+        */
    });
 
-
-
-
-
-
-//      END - MAP
-// *********************
+   //                           END - MAP
+   // *********************************************************************
+   // // ******************************************************************
 
 
 });

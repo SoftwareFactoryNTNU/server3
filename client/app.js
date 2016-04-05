@@ -5,7 +5,7 @@ angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStra
 
     uiGmapGoogleMapApiProvider.configure({
         key: 'AIzaSyCwtgP3ap8vcxFVkkHwh5bhlM85Ot2YYYQ',
-        v: '3.22', //defaults to latest 3.X anyhow
+        v: '3.25', //defaults to latest 3.X anyhow
         libraries: 'geometry,visualization'
     });
 

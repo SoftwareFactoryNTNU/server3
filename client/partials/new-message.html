@@ -6,17 +6,17 @@
 
 
 
-<p>lll</p>
+<p>this is a map</p>
 <div class="row">
-  <div style="display:inline-block; height:600px; width: 300px; border:1px solid black;"> <!-- class="col-sm-12">-->
+  <div class="col-sm-12">
     <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" events="map.events">
       <ui-gmap-markers models="map.markers" coords="'self'"></ui-gmap-markers>
 
 
 
-  <!--<ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+  <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
            geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
--->
+
 
   </ui-gmap-google-map>
 </div>

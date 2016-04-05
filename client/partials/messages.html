@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-sm-12" >
+    <rd-widget>
+      <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr ng-if = "data.my_crashes.length == 0">
+            <th>All crashes</th>
+          </tr>
+          <tr ng-if = "data.my_crashes.length != 0">
+            <th>EasyCrash Unit</th>
+            <th>Date happened</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if = "data.my_crashes.length == 0">
+            <td colspan = "2">No Crashes found</td>
+          </tr>
+          <tr ng-repeat = "crash in data.my_crashes | orderBy: 'date_happened' : -1">
+            <td>{{getUnitName(crash.pi_id)}}</td>
+            <td>{{ unixToString(crash.date_happened)[0] }}, {{ unixToString(crash.date_happened)[1] }}</td>
+            <td>
+              <i class = "ion ion-record" ng-if = "ruh.status == 0" style = "margin-left: 14px;color:red;"></i>
+              <i class = "ion ion-record" ng-if = "ruh.status == 1" style = "margin-left: 14px;color:yellow;"></i>
+              <i class = "ion ion-record" ng-if = "ruh.status == 2" style = "margin-left: 14px;color:green;"></i>
+            </td>
+            <td>
+              <button class = "btn btn-primary btn-sm pull-right" type="button" name="button" style = "margin-left:5px!Important;"  ng-click = "show_crash(crash._id);"><span class="fa fa-area-chart"></span>Show crash rapport</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </rd-widget>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-sm-12">
+    <rd-widget>
+      <div class="row">
+        <div class="col-sm-12">
+        <md-content layout-padding>
+              <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Message Title</label>
+                  <input ng-model="global_message.title">
+                </md-input-container>
+              </div>
+              <div layout-gt-sm="row">
+                <md-input-container class="md-block" style = "width:100%;">
+                  <label>Message Content</label>
+                  <textarea ng-model="global_message.content" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+                </md-input-container>
+              </div>
+        </md-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <button class = "btn btn-success btn-sm pull-right" type="button" name="button" ng-click = "send_global_message();"><span class="fa fa-send"></span>Send global message</button>
+          <p class = "pull-right" style = "margin-top:6px;">
+            <i>This will send a global message to all the family relatives that are registered. &nbsp;&nbsp;&nbsp;</i>
+          </p>
+        </div>
+      </div>
+    </rd-widget>
+  </div>
+</div>

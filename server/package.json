@@ -1,0 +1,24 @@
+{
+  "name": "satellizer-server",
+  "version": "0.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "apns": "^0.1.0",
+    "async": "^1.2.1",
+    "bcryptjs": "^2.1.0",
+    "body-parser": "^1.13.1",
+    "colors": "^1.1.2",
+    "cors": "^2.7.1",
+    "express": "^4.13.0",
+    "express-zip": "^2.0.0",
+    "jwt-simple": "^0.3.0",
+    "mailgun-send": "0.0.3",
+    "moment": "^2.10.3",
+    "mongoose": "^4.0.6",
+    "morgan": "^1.6.0",
+    "node-base64-image": "^0.1.2",
+    "randomstring": "^1.1.4",
+    "request": "^2.58.0",
+    "shortid": "^2.2.4"
+  }
+}

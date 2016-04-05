@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <div class="center-form panel">
+      <div class="row">
+        <div class="col-sm-12" style = "text-align:center;">
+          <h2>Create Account</h2>
+        </div>
+      </div>
+        <md-content layout-padding ng-if = "!data.user_created_successfully && !data.creating_user">
+          <div>
+            <form name="userForm">
+              <md-input-container class="md-block">
+                <label>First name</label>
+                <input ng-model="data.first_name" type = "text">
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Last name</label>
+                <input ng-model="data.last_name" type = "text">
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Email</label>
+                <input ng-model="data.email" type = "text">
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Password</label>
+                <input ng-model="data.password" type = "password">
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Repeat password</label>
+                <input ng-model="data.password_again" type = "password">
+              </md-input-container>
+              <md-button class="md-raised md-primary" style = "width:93%;" ng-click = "signup();"> Sign Up </md-button>
+            </form>
+          </div>
+        </md-content>
+        <md-content layout-padding ng-if = "data.user_created_successfully">
+          <div style = "text-align:center;">
+            Account created successfully! Please check your email before you <a href="#/login" style = "color:#0281DE;">log in</a>
+          </div>
+        </md-content>
+        <md-content layout-padding ng-if = "data.creating_user">
+          <div>
+            <circle-spinner></circle-spinner>
+          </div>
+        </md-content>
+    </div>
+    </div>
+  </div>
+</div>

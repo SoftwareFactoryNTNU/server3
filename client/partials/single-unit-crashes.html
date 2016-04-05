@@ -1,0 +1,39 @@
+<md-dialog aria-label="Add Project"  ng-cloak flex = "50">
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Crashes for "{{data.unit.name}}"</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <table class="table table-striped">
+        <thead>
+          <tr ng-if = "data.my_crashes.length == 0">
+            <th>My Crashes</th>
+          </tr>
+          <tr ng-if = "data.my_crashes.length != 0">
+            <th>Date happened</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if = "data.my_crashes.length == 0">
+            <td colspan = "2">No Crashes found</td>
+          </tr>
+          <tr ng-repeat = "crash in data.my_crashes | orderBy: 'date_happened' : -1">
+            <td>{{ unixToString(crash.date_happened)[0] }}, {{ unixToString(crash.date_happened)[1] }}</td>
+            <td>
+              <i class = "ion ion-record" ng-if = "ruh.status == 0" style = "margin-left: 14px;color:red;"></i>
+              <i class = "ion ion-record" ng-if = "ruh.status == 1" style = "margin-left: 14px;color:yellow;"></i>
+              <i class = "ion ion-record" ng-if = "ruh.status == 2" style = "margin-left: 14px;color:green;"></i>
+            </td>
+            <td>
+              <button class = "btn btn-primary btn-sm pull-right" type="button" name="button" style = "margin-left:5px!Important;"  ng-click = "show_crash(crash._id);"><span class="fa fa-area-chart"></span>Show crash rapport</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </md-dialog-content>
+  </form>
+</md-dialog>

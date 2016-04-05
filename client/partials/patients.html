@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="row" style = "margin-bottom:10px;">
+        <button class = "btn btn-success btn-sm" type="button" name="button" ng-click = "go_to_add_patients();"><span class="fa fa-user-plus"></span>Add EasyCrash Unit</button>
+    </div>
+    <rd-widget>
+      <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr ng-if = "data.my_units.length == 0">
+            <th>My EasyCrash Units</th>
+          </tr>
+          <tr ng-if = "data.my_units.length != 0">
+            <th>Name</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-if = "data.my_units.length == 0">
+            <td colspan = "2">No EasyCrash Units found</td>
+          </tr>
+          <tr ng-repeat = "unit in data.my_units" ng-if = "data.my_units.length != 0">
+            <td>{{unit.name}}</td>
+            <td>
+              <button class = "btn btn-primary btn-sm pull-right" type="button" name="button" style = "margin-left:5px!Important;"  ng-click = "show_single_unit_crashes($event, unit._id);"><span class="fa fa-archive"></span>Show Crashes</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </rd-widget>
+    <rd-widget-footer>
+      <ul class="pagination pagination-sm pull-right">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#" ng-repeat = "number_tab in data.number_tabs">{{number_tab.number}}</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+      <div class="clearfix"></div>
+    </rd-widget-footer>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-sm-12">
+    <rd-widget>
+      <div class = "row" style = "font-size:20px;margin-top:15px;border-bottom: 1px solid #E9E9E9;">
+        <div class="col-sm-12" style = "margin-left:17px;">
+          <b>{{new_message_sender.title}}</b>
+          <div class = "pull-right" style = "font-size:15px;margin-left:-17px;margin-top:5px;">
+            {{new_message_sender_sender}} - {{new_message_sender.date_received}}
+          </div>
+        </div>
+      </div>
+      <div class = "row" style = "font-size:15px;margin-top:5px;">
+        <div class="col-sm-12" style = "margin-left:17px;">
+          {{new_message_sender.content}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <button class = "btn btn-primary btn-sm pull-right" type="button" name="button" ng-click = "reply_to_message();"><span class="fa fa-reply"></span>Reply</button>
+        </div>
+      </div>
+    </rd-widget>
+  </div>
+</div>
+<div class="row" ng-if = "reply">
+  <div class="col-sm-12">
+    <rd-widget>
+      <div style = "font-size:20px;margin-left:30px;margin-top:15px;">
+        <b>New message to: {{new_message_sender_sender}}</b>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+        <md-content layout-padding>
+              <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Message Title</label>
+                  <input ng-model="new_message.title">
+                </md-input-container>
+              </div>
+              <div layout-gt-sm="row" >
+                <md-input-container class="md-block" style = "width:100%;">
+                  <label>Message Content</label>
+                  <textarea ng-model="new_message.content" md-maxlength="150" rows="5"></textarea>
+                </md-input-container>
+              </div>
+        </md-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <button class = "btn btn-success btn-sm pull-right" type="button" name="button" ng-click = "reply_personal_message();"><span class="fa fa-send"></span>Send message</button>
+          <p class = "pull-right" style = "margin-top:6px;">
+            <i>This replies the message you received from {{new_message_sender_sender}} &nbsp;&nbsp;&nbsp;</i>
+          </p>
+        </div>
+      </div>
+    </rd-widget>
+  </div>
+</div>

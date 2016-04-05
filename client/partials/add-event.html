@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-sm-12">
+  <circle-spinner ng-if = "sending_message"></circle-spinner>
+  <md-content layout-padding ng-if = "!sending_message">
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Event title</label>
+            <input ng-model="event.title">
+          </md-input-container>
+          <md-input-container class="md-block">
+            <input mdc-datetime-picker date="true" time="true" type="text" id="datetime" placeholder="Date" min-date="minDate" ng-model="event.selected_date" class= "md-input">
+          </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" style = "width:100%;">
+            <label>Event description</label>
+            <textarea ng-model="event.description" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+          </md-input-container>
+        </div>
+  </md-content>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <button class = "btn btn-primary btn-md pull-right" type="button" name="button" ng-click = "add_event();"><span class="fa fa-plus"></span>Add event</button>
+  </div>
+</div>

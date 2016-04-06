@@ -4,6 +4,10 @@ body {
   background-color: white;
 }
 
+textarea {
+  height: 120;
+}
+
 .angular-google-map-container {
     position: relative;
     top: 0;

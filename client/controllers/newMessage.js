@@ -1,5 +1,5 @@
 angular.module('MyApp')
-  .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, $interval, uiGmapGoogleMapApi) {
+  .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, $interval, uiGmapGoogleMapApi, Note) {
 
     if ($state.get('admin.newmessage').data != undefined) {
       $scope.data = $state.get('admin.newmessage').data;
@@ -58,6 +58,182 @@ angular.module('MyApp')
       $mdDialog.show(alert).then(cb);
     };
 
+    //                            NOTES
+    // *********************************************************************
+
+    function showAlert(content, duration) {
+      $alert({
+        content: content,
+        animation: 'fadeZoomFadeDown',
+        type: 'material',
+        duration: duration
+      });
+    }
+    $scope.isOpen = false;
+      $scope.demo = {
+        isOpen: false,
+        count: 0,
+        selectedDirection: 'right'
+      };
+
+    var originatorEv;
+
+    $scope.openMenu = function($mdOpenMenu, ev) {
+      originatorEv = ev;
+      $mdOpenMenu(ev);
+      
+    };
+
+
+    $scope.toggleNotifications = function() {
+      $scope.notificationsEnabled = !this.notificationsEnabled;
+    };
+
+
+        $scope.changeNote = function(ev, item) {
+          // Appending dialog to document.body to cover sidenav in docs app
+          var confirm = $mdDialog.prompt()
+                .title('Recompose your note')
+                .textContent('Edit your note on the accident')
+                .placeholder('no it was realy just a lie')
+                .ariaLabel('note edit')
+                .targetEvent(ev)
+                .ok('Okay!')
+                .cancel('No nothing new');
+          $mdDialog.show(confirm).then(function(result) {
+            //user wanted to change
+            console.log("EDIT!");
+            item.txt = result;
+            $scope.edNote(item);
+            //$scope.notes_for.splice($scope.notes_for.indexOf(item), 1);
+            //$scope.status = 'You decided to name your dog ' + result + '.';
+          }, function() {
+            //$scope.status = 'You didn\'t name your dog.';
+          });
+        };
+
+        $scope.showConfirm = function(ev, item) {
+          // Appending dialog to document.body to cover sidenav in docs app
+          var confirm = $mdDialog.confirm()
+                .title('Would you like to delete this note?')
+                .textContent('Remember when it is removed it is never comming back.')
+                .ariaLabel('Still sure?')
+                .targetEvent(ev)
+                .ok('Please do it!')
+                .cancel('No no never');
+          $mdDialog.show(confirm).then(function() {
+            console.log("yes remove the message");
+            $scope.deleteNote(item);
+            $scope.notes_for.splice($scope.notes_for.indexOf(item), 1);
+            $scope.status = 'You decided to get rid of your debt.';
+          }, function() {
+            $scope.status = 'You decided to keep your debt.';
+          });
+        };
+
+        console.log("test");
+
+        $scope.notes_for = [];
+        $scope.noteData = {};
+
+        $scope.refreshNotes =function(){
+          Note.getNote()
+           .then(function(response) {
+             console.log(response);
+             //$scope.noteData = response.data;
+             $scope.notes_for = [];
+             $scope.noteData = {};
+             for (var i=0;i<response.data.length;i++){
+                 $scope.notes_for.push(response.data[i])
+             }
+             //$scope.$$phase || $scope.$apply();
+             //$scope.$apply();   //$digest already in progress uhhh...
+             $timeout(function() {
+               $scope.$apply();
+             });
+             console.log($scope.notes_for);
+           })
+           .catch(function(response) {
+             showAlert('Could not load note data..')
+           })
+         }
+         $scope.refreshNotes();
+
+         $scope.edNote = function(noteData) {
+           //var noteData = $scope.noteData.note;
+           console.log(noteData);
+           Note.editNote(noteData)
+           .then(function(response) {
+             showAlert('Note has been edited', 4);
+             $timeout(function() {
+               $scope.$apply();
+             });
+           }) .catch(function(response) {
+             console.log(response);
+             showAlert('Something went wrong! Please try again.', 4);
+           });
+         };
+
+
+        $scope.deleteNote = function(noteData) {
+          //var noteData = $scope.noteData.note;
+          console.log(noteData);
+          Note.deleteNote(noteData)
+          .then(function(response) {
+            showAlert('Note has been deleted', 4);
+            $timeout(function() {
+              $scope.$apply();
+            });
+          }) .catch(function(response) {
+            console.log(response);
+            showAlert('Something went wrong! Please try again.', 4);
+          });
+        };
+
+        $scope.getPerson = function(pnumber) {
+          /*if (pnumber==$scope.personalData._id){
+            return $scope.personalData.email
+          } else {
+            console.log("error")
+          }
+          */
+          return "bjarne"
+        }
+
+        $scope.getTimeMongo = function(_id){
+          timestamp = _id.toString().substring(0,8);
+          return (new Date( parseInt( timestamp, 16 ) * 1000 )).toDateString();
+        }
+
+         //console.log(crash.notes);
+
+         // How to add a note to a spesific crash
+         $scope.updateNote = function(noteData) {
+           //var noteData = $scope.noteData.note;
+           var noteData = {
+             txt: noteData.txt
+           };
+           console.log(noteData);
+           Note.updateNote(noteData)
+           .then(function(response) {
+             showAlert('Note has been added', 4);
+
+             $scope.noteData = {};
+             $scope.refreshNotes();
+             console.log($scope.notes_for);
+           }) .catch(function(response) {
+             console.log(response);
+             showAlert('Something went wrong! Please try again.', 4);
+           })
+         };
+
+
+
+
+    //                         END - NOTES
+    // ---------------------------------------------------------------------
+
+
     //                            MAP
     // *********************************************************************
     // // ------------------------------------------------------------------
@@ -72,14 +248,10 @@ angular.module('MyApp')
      -----------------------------------------------------------------------
     */
 
-
   console.log("hello");
   var cords = [[63.568138,10.295417],[63.314919,10.752056],[63.108749,11.5345],[63.086418,11.648694],[63.827442,10.371333],[62.961193,10.090278],[62.743168,9.291194],[63.122833,10.591667],[63.123749,9.443389],[63.210278,10.70875],[63.016499,10.958944],[63.163502,10.526361],[62.112194,11.48656],[63.019974,9.197861],[63.328529,11.027583],[63.390305,11.418528],[63.141998,11.722361],[63.147141,9.11575],[62.876141,9.661972],[62.821918,10.608694],[62.7085,9.800861],[62.412193,11.18656],[62.550045646,12.050345356]];
   $scope.map_coordinates = cords;
   var speedArray = [55, 48, 49, 50, 50, 51, 48, 50, 50, 48, 51, 52, 54, 55, 55, 55, 56, 56, 55, 54, 57, 55, 54, 55, 54, 56, 56, 56, 56, 54, 56, 56, 54, 56, 55, 54, 56, 56, 54];
-
-
-
 
   function drawTheAmazingMap(crashData) {
     // draw the map!
@@ -109,8 +281,6 @@ angular.module('MyApp')
         }]
     };
 
-
-
       uiGmapGoogleMapApi.then(function(maps) {
         console.log("uiGmapGoogleMapApi has been loaded")
         var myLatLng = [];
@@ -139,9 +309,8 @@ angular.module('MyApp')
 
         $scope.updateInfo = function(){
           //console.log("!");
-          // // the future is here in this method
+          // // the future is here - in this method
         }
-
 
         $scope.animateCar = function(marker, cords, km_h){
           var target = 1;
@@ -150,12 +319,8 @@ angular.module('MyApp')
           //cords.push([startPos[0], startPos[1]]);
           //console.log(cords);
           $scope.goTo = function(){
-            //var lat = marker.position.lat();
-            //var lng = marker.position.lng();
             var lat = $scope.map.markers[0].latitude;
             var lng = $scope.map.markers[0].longitude;
-            // console.log(lat);
-            // console.log(lng);
 
             var step = (km_h * 1000 * delay) / 3600000
             $scope.updateInfo();

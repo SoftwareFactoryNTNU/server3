@@ -25,6 +25,7 @@ function(event, toState, toParams, fromState, fromParams){
   }
 })
 
+
     var mobileView = 992;
     $scope.toggle = false;
     $cookieStore.put('toggle', $scope.toggle);

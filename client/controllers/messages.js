@@ -160,7 +160,9 @@ angular.module('MyApp')
     $scope.map_coordinates = cords;
     var speedArray = [55, 48, 49, 50, 50, 51, 48, 50, 50, 48, 51, 52, 54, 55, 55, 55, 56, 56, 55, 54, 57, 55, 54, 55, 54, 56, 56, 56, 56, 54, 56, 56, 54, 56, 55, 54, 56, 56, 54];
 
-
+    /**
+     * Depricated
+     */
     $scope.map = {
           center: {latitude: $scope.map_coordinates[0][0],longitude: $scope.map_coordinates[0][1]},
           zoom: 11,
@@ -175,6 +177,9 @@ angular.module('MyApp')
           }]
       };
 
+      /**
+       * Depricated
+       */
         uiGmapGoogleMapApi.then(function(maps) {
           $timeout(function() {
             $scope.$apply();

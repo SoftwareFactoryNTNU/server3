@@ -5,6 +5,7 @@ var User = require('../models/UserSchema.js');
 var Pi = require('../models/PiSchema.js');
 var Crash = require('../models/CrashSchema.js');
 var DataPoint = require('../models/DatapointSchema.js');
+var Note = require('../models/NoteSchema.js');
 var auth = require('../authentication/auth.js');
 var status = require('../status.js');
 var jwt = require('jwt-simple');
@@ -355,6 +356,91 @@ app.post('/api/add_bulk_data', function(req, res) {
       });
     });
   });
+
+  //---------------------------------------------------------------------
+  //               **      moe's try to add notes    **
+  // --------------------------------------------------------------------
+
+  /*
+   |--------------------------------------------------------------------------
+   | Add note to a specific crash
+   | parameters: user._id, txt
+   |--------------------------------------------------------------------------
+   */
+   app.post('/api/update_note', auth.ensureAuthenticated, function(req, res) {
+     User.findById(req.user, function(err, user) {
+       if (!user) {
+         return res.status(400).send({ message: 'User not found' });
+       }
+        var newNote = new Note({
+          user_id: user._id,
+          crash_id: "p",
+          date: Date.now(),
+          txt: req.body.txt
+        });
+        newNote.save(function(err) {
+          if (err) {
+            throw err;
+          }
+          return res.status(200).send({message: 'Note saved!'});
+        });
+      });
+    });
+
+    /*
+     |--------------------------------------------------------------------------
+     | Delete incoming note
+     | parameters: note
+     |--------------------------------------------------------------------------
+     */
+     app.post('/api/delete_note', auth.ensureAuthenticated, function(req, res) {
+       Note.findByIdAndRemove(req.body._id , function(err) {
+        if(err){
+          return res.status(400).send({message: 'Could not delete note'});
+        } else {
+          // it worked!
+          return res.status(200).send({message: 'Note deleted'});
+        };
+      });
+    });
+
+    /*
+     |--------------------------------------------------------------------------
+     | Edit incoming note
+     | parameters: note
+     |--------------------------------------------------------------------------
+     */
+     app.post('/api/edit_note', auth.ensureAuthenticated, function(req, res) {
+       Note.findById(req.body._id , function(err, note) {
+        if(err){
+          return res.status(400).send({message: 'Could not edit note'});
+        } else {
+          // it worked!
+          note.txt = req.body.txt;
+
+          note.save(function(err) {
+            res.status(200).end();
+          });
+        };
+      });
+    });
+
+    /*
+     |--------------------------------------------------------------------------
+     | Get all the notes of a user (not optimal now that crashes are separable)
+     | parameters: note
+     |--------------------------------------------------------------------------
+     */
+    app.get('/api/note', auth.ensureAuthenticated, function(req, res) {
+      Note.find({user_id: req.user}, function(err, notes) {
+        if(err){
+          console.log(err);
+          res.status(500).send();
+        } else {
+        res.send(notes);
+        }
+      });
+    });
 }
 
 module.exports = routes;

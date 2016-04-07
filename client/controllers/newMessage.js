@@ -6,7 +6,8 @@ angular.module('MyApp')
       Account.getSingleCrash({
         crash_id: $state.get('admin.newmessage').data
       }).success(function(response) {
-        console.log(response);
+        $scope.data = processVechicleData(response.data, 'Speed / mph', 'Pedal position');
+        console.log($scope.data);
         drawTheAmazingMap(response);
       }).catch(function(err) {
         showPopup('Could not get crash data', err.data.message, function() {
@@ -16,21 +17,40 @@ angular.module('MyApp')
       $state.go('admin.messages');
     }
 
-    $scope.sendResponse = function() {
-      Account.sendResponse({
-        message: $scope.data.response_message,
-        measures_taken: $scope.data.response_measures_taken,
-        ruh_id: $scope.data.ruh._id
-      }).success(function(response) {
-        showPopup('Response sent!', 'The sender will be notified.', function() {
-          $state.go('admin.messages');
-        })
-      }).catch(function(err) {
-        showPopup('Error!', err.data.message, function() {
+    function processVechicleData(datapoints, pi_name1, pi_name2) {
+      console.log(datapoints);
+      var data = [];
+      var obj1 = {
+        key: pi_name1,
+        values: []
+      };
+      var obj2 = {
+        key: pi_name2,
+        values: []
+      };
+      for (i = 0; i < datapoints.length; i++) {
+        var tempobject1 = {
+          series: 0,
+          x: datapoints[i].timestamp,
+          y: datapoints[i].vehicle_speed
+        };
+        var tempobject2 = {
+          series: 1,
+          x: datapoints[i].timestamp,
+          y: datapoints[i].accelerator_pedal_position
+        };
+        obj1.values.push(tempobject1);
+        obj2.values.push(tempobject2);
+      }
+      data.push(obj1);
+      data.push(obj2);
+      console.log(data);
+      return data;
+    }
 
-        })
-      })
-    };
+    $timeout(function() {
+      console.log($scope.data);
+    },1000)
 
     $scope.respond = function() {
       $scope.data.respond = !$scope.data.respond;
@@ -57,6 +77,7 @@ angular.module('MyApp')
         .ok('I understand');
       $mdDialog.show(alert).then(cb);
     };
+
 
     //                            NOTES
     // *********************************************************************
@@ -238,6 +259,7 @@ angular.module('MyApp')
     // ---------------------------------------------------------------------
 
 
+
     //                            MAP
     // *********************************************************************
     // // ------------------------------------------------------------------
@@ -252,7 +274,7 @@ angular.module('MyApp')
      -----------------------------------------------------------------------
     */
 
-  console.log("hello");
+
   var cords = [[63.568138,10.295417],[63.314919,10.752056],[63.108749,11.5345],[63.086418,11.648694],[63.827442,10.371333],[62.961193,10.090278],[62.743168,9.291194],[63.122833,10.591667],[63.123749,9.443389],[63.210278,10.70875],[63.016499,10.958944],[63.163502,10.526361],[62.112194,11.48656],[63.019974,9.197861],[63.328529,11.027583],[63.390305,11.418528],[63.141998,11.722361],[63.147141,9.11575],[62.876141,9.661972],[62.821918,10.608694],[62.7085,9.800861],[62.412193,11.18656],[62.550045646,12.050345356]];
   $scope.map_coordinates = cords;
   var speedArray = [55, 48, 49, 50, 50, 51, 48, 50, 50, 48, 51, 52, 54, 55, 55, 55, 56, 56, 55, 54, 57, 55, 54, 55, 54, 56, 56, 56, 56, 54, 56, 56, 54, 56, 55, 54, 56, 56, 54];
@@ -391,5 +413,82 @@ angular.module('MyApp')
    // *********************************************************************
    // // ******************************************************************
 
+   $scope.options = {
+       chart: {
+           type: 'lineWithFocusChart',
+           height: 450,
+           margin : {
+               top: 20,
+               right: 20,
+               bottom: 60,
+               left: 40
+           },
+           duration: 500,
+           useInteractiveGuideline: true,
+           xAxis: {
+               axisLabel: 'Time',
+               tickFormat: function(d){return d3.time.format('%H:%M:%S')(new Date(d * 1000));}
+           },
+           x2Axis: {
+               tickFormat: function(d){return d3.time.format('%H:%M:%S')(new Date(d * 1000));}
+           },
+           yAxis: {
+               axisLabel: '',
+               tickFormat: function(d){
+                   return d3.format(',.2f')(d);
+               },
+               rotateYLabel: false
+           },
+           y2Axis: {
+               tickFormat: function(d){
+                   return d3.format(',.1f')(d);
+               }
+           }
 
+       }
+   };
+
+   /* Random Data Generator (took from nvd3.org) */
+   function generateData() {
+       return stream_layers(3,10+Math.random()*200,.1).map(function(data, i) {
+           return {
+               key: 'Stream' + i,
+               values: data
+           };
+       });
+   }
+
+   /* Inspired by Lee Byron's test data generator. */
+   function stream_layers(n, m, o) {
+       if (arguments.length < 3) o = 0;
+       function bump(a) {
+           var x = 1 / (.1 + Math.random()),
+               y = 2 * Math.random() - .5,
+               z = 10 / (.1 + Math.random());
+           for (var i = 0; i < m; i++) {
+               var w = (i / m - y) * z;
+               a[i] += x * Math.exp(-w * w);
+           }
+       }
+       return d3.range(n).map(function() {
+           var a = [], i;
+           for (i = 0; i < m; i++) a[i] = o + o * Math.random();
+           for (i = 0; i < 5; i++) bump(a);
+           return a.map(stream_index);
+       });
+   }
+
+   /* Another layer generator using gamma distributions. */
+   function stream_waves(n, m) {
+       return d3.range(n).map(function(i) {
+           return d3.range(m).map(function(j) {
+               var x = 20 * j / m - i / 3;
+               return 2 * x * Math.exp(-.5 * x);
+           }).map(stream_index);
+       });
+   }
+
+   function stream_index(d, i) {
+       return {x: i, y: Math.max(0, d)};
+   }
 });

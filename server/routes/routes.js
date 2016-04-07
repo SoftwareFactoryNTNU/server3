@@ -80,8 +80,9 @@ app.post('/api/get_single_crash', auth.ensureAuthenticated, function(req, res) {
       if (err) {
         throw err;
       }
-      return res.status(200).send({ data: datapoints });
-    });
+      return res.status(200).send({ data: datapoints,
+      crash: crash });
+    }).sort({timestamp: 1});
   });
 });
 
@@ -142,9 +143,6 @@ app.post('/api/connect_user_to_pi',auth.ensureAuthenticated, function(req, res) 
       }
       if (!pi) {
         return res.status(406).send({ message: 'There is no PI unit connected to this secret code', status: 2004 });
-      }
-      if (pi.owner_id != null) {
-        return res.status(406).send({ message: 'A user is already connected to this PI', status: 2005 });
       }
       console.log(pi);
       pi.owner_id = req.user;

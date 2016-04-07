@@ -1,3 +1,4 @@
+
 <p>crash data</p>
 <div class="row">
   <div class="col-sm-12">
@@ -84,4 +85,40 @@
       </li>
     </ul>
   </div>
+
+<!--
+<div ng-cloak>
+  <md-content>
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="MAP">
+        <md-content class="md-padding">
+
+          <div class="row">
+            <div class="col-sm-12">
+
+              <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" events="map.events">
+                <ui-gmap-markers models="map.markers" coords="'self'"></ui-gmap-markers>
+            <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                     geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
+            </ui-gmap-google-map>
+
+            <button ng-click="restartAnimation()" type="button" class="btn btn-primary">Restart animation</button>
+
+          </div>
+          </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="SPEED">
+        <md-content class="md-padding">
+          <div ng-app="myApp">
+            <div>
+                <nvd3 options="options" data="data"></nvd3>
+            </div>
+        </div>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+>>>>>>> speed_graph
 </div>
+-->

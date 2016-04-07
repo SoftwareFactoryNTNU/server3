@@ -6,7 +6,7 @@ var userSchema = new mongoose.Schema({
   last_name: { type: String, required: true },
   email: { type: String, unique: true, lowercase: true, required: true },
   password: { type: String, required: true },
-  activated: { type: Boolean, default: false },
+  activated: { type: Boolean, default: true },
   confirmation_string: { type: String, required: true },
   account_type: { type: String, default: null },
   owner_ids: { type: Array, default: [] },

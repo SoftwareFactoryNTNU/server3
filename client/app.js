@@ -1,4 +1,4 @@
-angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ui.bootstrap', 'ngCookies', 'ngMaterial', 'angular-spinkit', 'uiGmapgoogle-maps'])
+angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ui.bootstrap', 'ngCookies', 'ngMaterial', 'angular-spinkit', 'uiGmapgoogle-maps', 'nvd3'])
   .config(function($stateProvider, $urlRouterProvider, $authProvider, $mdThemingProvider, uiGmapGoogleMapApiProvider) {
 
     $mdThemingProvider.theme('docs-dark', 'default').primaryPalette('yellow').dark();

@@ -1,5 +1,5 @@
 angular.module('MyApp')
-  .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, $interval, uiGmapGoogleMapApi, Note) {
+  .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, $interval, uiGmapGoogleMapApi, Note, $mdMedia) {
 
     if ($state.get('admin.newmessage').data != undefined) {
       $scope.data = $state.get('admin.newmessage').data;
@@ -81,7 +81,7 @@ angular.module('MyApp')
     $scope.openMenu = function($mdOpenMenu, ev) {
       originatorEv = ev;
       $mdOpenMenu(ev);
-      
+
     };
 
 
@@ -92,12 +92,16 @@ angular.module('MyApp')
 
         $scope.changeNote = function(ev, item) {
           // Appending dialog to document.body to cover sidenav in docs app
+            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
           var confirm = $mdDialog.prompt()
                 .title('Recompose your note')
                 .textContent('Edit your note on the accident')
                 .placeholder('no it was realy just a lie')
                 .ariaLabel('note edit')
                 .targetEvent(ev)
+                .parent( angular.element(document.body))
+                .fullscreen(useFullScreen)
+                .clickOutsideToClose(true)
                 .ok('Okay!')
                 .cancel('No nothing new');
           $mdDialog.show(confirm).then(function(result) {

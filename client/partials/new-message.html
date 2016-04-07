@@ -1,4 +1,4 @@
-
+<!--
 <p>crash data</p>
 <div class="row">
   <div class="col-sm-12">
@@ -11,6 +11,7 @@
       </ui-gmap-polyline>
     </ui-gmap-google-map>
     <br>
+    <div>
     <div>
       <form class="form">
         <md-input-container class="md-block">
@@ -27,8 +28,8 @@
         <blockquote>
           <strong>{{getTimeMongo(note._id)}}</strong><br>
           {{note.txt}}
-          <cite class="clearfix">—{{getPerson(note.user_id)}}</cite> <!-- —{{note.user_id}}</cite>-->
-  <!--          <md-fab-toolbar count="demo.count"
+          <cite class="clearfix">—{{getPerson(note.user_id)}}</cite>
+            <md-fab-toolbar count="demo.count"
                         md-direction="{{demo.selectedDirection}}">
           <md-fab-trigger class="align-with-text">
             <md-button aria-label="menu" class="md-fab md-primary">
@@ -46,7 +47,7 @@
             </md-fab-actions>
           </md-toolbar>
   </md-fab-toolbar>
--->
+
 
 <div class="dropdown">
     <a data-target="#" href="page.html" data-toggle="dropdown" class="dropdown-toggle"><md-icon md-menu-origin="" md-font-set="material-icons"> more_horiz </md-icon> </a>
@@ -61,7 +62,7 @@
         </md-button></li>
     </ul>
 </div>
-          <!-- <md-menu>
+           <md-menu>
             <md-button aria-label="Open note actions" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
               <md-icon md-menu-origin="" md-font-set="material-icons"> more_horiz </md-icon>
             </md-button>
@@ -80,13 +81,15 @@
               </md-menu-item>
             </md-menu-content>
           </md-menu>
--->
+
         </blockquote>
       </li>
     </ul>
   </div>
+  </div>
+</div>
 
-<!--
+-->
 <div ng-cloak>
   <md-content>
     <md-tabs md-dynamic-height md-border-bottom>
@@ -110,15 +113,97 @@
       </md-tab>
       <md-tab label="SPEED">
         <md-content class="md-padding">
-          <div ng-app="myApp">
+          <div>
             <div>
                 <nvd3 options="options" data="data"></nvd3>
             </div>
         </div>
         </md-content>
       </md-tab>
+      <md-tab label="NOTE">
+        <md-content class="md-padding">
+          <div>
+            <div>
+              <div>
+              <div>
+              <form class="form">
+                <md-input-container class="md-block">
+                      <label>Note</label>
+                      <textarea style="height:100%;" ng-model="noteData.txt" md-maxlength="150" rows="4" md-select-on-focus placeholder="Becouse of a bird I could't see anything"></textarea>
+                </md-input-container>
+                <md-button type="submit" class="md-raised md-primary" ng-click = "updateNote(noteData);">Add note</md-button>
+              </form>
+              </div>
+              <br>
+              <ul>
+              <h4>Notes</h4>
+              <li ng-repeat="note in notes_for">
+                <blockquote>
+                  <strong>{{getTimeMongo(note._id)}}</strong><br>
+                  {{note.txt}}
+                  <cite class="clearfix">—{{getPerson(note.user_id)}}</cite> <!-- —{{note.user_id}}</cite>-->
+              <!--          <md-fab-toolbar count="demo.count"
+                                md-direction="{{demo.selectedDirection}}">
+                  <md-fab-trigger class="align-with-text">
+                    <md-button aria-label="menu" class="md-fab md-primary">
+                      <md-icon md-menu-origin="" md-font-set="material-icons"> more_horiz </md-icon>
+                    </md-button>
+                  </md-fab-trigger>
+                  <md-toolbar>
+                    <md-fab-actions class="md-toolbar-tools">
+                      <md-button aria-label="comment" class="md-icon-button" ng-click="showConfirm($event, note)">
+                        <md-icon md-font-set="material-icons"> delete_forever </md-icon>
+                      </md-button>
+                      <md-button aria-label="label" class="md-icon-button" ng-click="changeNote($event, note)">
+                        <md-icon md-font-set="material-icons"> edit </md-icon>
+                      </md-button>
+                    </md-fab-actions>
+                  </md-toolbar>
+              </md-fab-toolbar>
+              -->
+
+              <div class="dropdown">
+              <a data-target="#" href="page.html" data-toggle="dropdown" class="dropdown-toggle"><md-icon md-menu-origin="" md-font-set="material-icons"> more_horiz </md-icon> </a>
+              <ul class="dropdown-menu">
+                <li><md-button ng-click="showConfirm($event, note)">
+                  <md-icon md-font-set="material-icons"> delete_forever </md-icon>
+                  Delete forever
+                </md-button></li>
+                <li><md-button ng-click="changeNote($event, note)">
+                  <md-icon md-font-set="material-icons"> edit </md-icon>
+                  Edit
+                </md-button></li>
+              </ul>
+              </div>
+                  <!-- <md-menu>
+                    <md-button aria-label="Open note actions" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+                      <md-icon md-menu-origin="" md-font-set="material-icons"> more_horiz </md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                      <md-menu-item>
+                        <md-button ng-click="showConfirm($event, note)">
+                          <md-icon md-font-set="material-icons"> delete_forever </md-icon>
+                          Delete forever
+                        </md-button>
+                      </md-menu-item>
+                      <md-menu-item>
+                        <md-button ng-click="changeNote($event, note)">
+                          <md-icon md-font-set="material-icons"> edit </md-icon>
+                          Edit
+                        </md-button>
+                      </md-menu-item>
+                    </md-menu-content>
+                  </md-menu>
+              -->
+                </blockquote>
+              </li>
+              </ul>
+              </div>
+            </div>
+        </div>
+        </md-content>
+      </md-tab>
     </md-tabs>
   </md-content>
->>>>>>> speed_graph
+
 </div>
--->

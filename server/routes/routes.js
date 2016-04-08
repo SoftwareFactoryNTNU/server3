@@ -6,6 +6,7 @@ var Pi = require('../models/PiSchema.js');
 var Crash = require('../models/CrashSchema.js');
 var DataPoint = require('../models/DatapointSchema.js');
 var Note = require('../models/NoteSchema.js');
+var yrno = require('yr.no-forecast');
 var auth = require('../authentication/auth.js');
 var status = require('../status.js');
 var jwt = require('jwt-simple');
@@ -268,6 +269,9 @@ app.post('/api/add_data', function(req, res) {
  |--------------------------------------------------------------------------
  */
 
+   var weatherNow;
+
+
 app.post('/api/add_bulk_data', function(req, res) {
   console.log(req.body);
   Pi.findOne({ pi_id: req.body.lines[0].pi_id }, function(err, pi) {
@@ -279,9 +283,19 @@ app.post('/api/add_bulk_data', function(req, res) {
       return res.status(400).send({ message: 'PI not found' });
     }
 
+    yrno.getWeather({
+      lat: 53.3478,
+      lon: 6.2597
+    }, function(err, location) {
+      location.getCurrentSummary(function(err, summary) {
+        // weatherNow = summary;
+        // console.dir(summary);
+        // return summary;
+
     var newCrash = new Crash({
       pi_id: req.body.lines[0].pi_id,
-      date_happened: req.body.lines[req.body.lines.length - 1].timestamp
+      date_happened: req.body.lines[req.body.lines.length - 1].timestamp,
+      weather: summary
     });
     newCrash.save(function(err) {
       if (err) {
@@ -313,6 +327,8 @@ app.post('/api/add_bulk_data', function(req, res) {
         console.log('got here');
         return res.status(200).send('data added').end();
       });
+    });
+  }, [1.9]);
     });
   });
 });

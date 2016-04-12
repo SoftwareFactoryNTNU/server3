@@ -95,9 +95,10 @@
     <md-tabs md-dynamic-height md-border-bottom>
       <md-tab label="MAP">
         <md-content class="md-padding">
-
           <div class="row">
             <div class="col-sm-12">
+              <p>{{getWeatherOfCrash()}}</p>
+              <p>{{getWeatherOfCrash.teperature}}</p>
 
               <ui-gmap-google-map center="map.center" zoom="17" draggable="true" events="map.events">
                 <ui-gmap-markers models="map.markers" coords="'self'"></ui-gmap-markers>

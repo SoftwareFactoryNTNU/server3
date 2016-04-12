@@ -1,11 +1,15 @@
 angular.module('MyApp')
   .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, $interval, uiGmapGoogleMapApi, Note, $mdMedia) {
 
+    var weatherCrash = "Maby snowy or foggy or dry"
     if ($state.get('admin.newmessage').data != undefined) {
       $scope.data = $state.get('admin.newmessage').data;
       Account.getSingleCrash({
         crash_id: $state.get('admin.newmessage').data
       }).success(function(response) {
+        console.log(response)
+        console.log("---------------------")
+        weatherCrash = response.crash.weather;
         $scope.data = processVechicleData(response.data, 'Speed / mph', 'Pedal position');
         console.log($scope.data);
         drawTheAmazingMap(response);
@@ -46,6 +50,10 @@ angular.module('MyApp')
       data.push(obj2);
       console.log(data);
       return data;
+    }
+
+    $scope.getWeatherOfCrash = function() {
+      return weatherCrash;
     }
 
     $scope.respond = function() {

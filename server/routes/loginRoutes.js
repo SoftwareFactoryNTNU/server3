@@ -14,7 +14,7 @@ mail.config({
   sender: 'postmaster@nibeklaussen.com'
 });
 
-var confirm_email_link = 'http://localhost:3000/api/confirm_account/';
+var confirm_email_link = 'http://37.139.2.213/api/confirm_account/';
 
 var loginRoutes = function(app) {
 

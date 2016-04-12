@@ -145,7 +145,9 @@ app.post('/api/connect_user_to_pi',auth.ensureAuthenticated, function(req, res) 
       if (!pi) {
         return res.status(406).send({ message: 'There is no PI unit connected to this secret code', status: 2004 });
       }
-      console.log(pi);
+      if (pi.owner_id) {
+        return res.status(406).send({ message: 'There is already a user connected to this PI', status: 2004 });
+      }
       pi.owner_id = req.user;
       pi.save(function(err) {
         if (err) {
@@ -295,7 +297,9 @@ app.post('/api/add_bulk_data', function(req, res) {
     var newCrash = new Crash({
       pi_id: req.body.lines[0].pi_id,
       date_happened: req.body.lines[req.body.lines.length - 1].timestamp,
-      weather: summary
+      weather: summary,
+      latitude: req.body.lines[req.body.lines.length - 1].latitude,
+      longitude: req.body.lines[req.body.lines.length - 1].longitude
     });
     newCrash.save(function(err) {
       if (err) {

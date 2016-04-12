@@ -21,6 +21,12 @@ angular.module('MyApp')
       $state.go('admin.messages');
     }
 
+    Account.getProfile().success(function(response) {
+      console.log(response);
+    }).catch(function(err) {
+      console.log(err);
+    })
+
     function processVechicleData(datapoints, pi_name1, pi_name2) {
       console.log(datapoints);
       var data = [];

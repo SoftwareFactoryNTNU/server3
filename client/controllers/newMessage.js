@@ -7,7 +7,9 @@ angular.module('MyApp')
         crash_id: $state.get('admin.newmessage').data
       }).success(function(response) {
         $scope.data = processVechicleData(response.data, 'Speed / mph', 'Pedal position');
-        console.log($scope.data);
+        $scope.crash = response.crash;
+        console.log($scope.crash.crash_sensors);
+
         drawTheAmazingMap(response);
       }).catch(function(err) {
         showPopup('Could not get crash data', err.data.message, function() {
@@ -363,15 +365,11 @@ angular.module('MyApp')
             $scope.updateInfo();
             var dest = new google.maps.LatLng(cords[target][0], cords[target][1]);
             var start = new google.maps.LatLng(cords[target-1][0], cords[target-1][1]);
-            console.log("target: "+cords[target][0] + ":" + cords[target][1])
-            console.log("start: "+cords[target-1][0] + ":" + cords[target-1][1])
             var distance = google.maps.geometry.spherical.computeDistanceBetween(
               dest, start); //in meters
-              console.log(distance);
               //if (isNaN(step)) { step = 1;}
               var numStep = distance / step;
               //if (numStep>=500) { numStep = 90;}
-              console.log("number of steps: " + numStep + " - dist: "+  distance +" - step"+ step)
               var i = 0;
               var deltaLat = (cords[target][0] - lat) / numStep;
               var deltaLng = (cords[target][1] - lng) / numStep;

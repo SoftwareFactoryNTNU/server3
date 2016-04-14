@@ -6,7 +6,8 @@ var crashSchema = new mongoose.Schema({
   date_happened: { type: Number, required: true },
   weather: Object,
   latitude: { type: Number, required: true },
-  longitude: { type: Number, required: true }
+  longitude: { type: Number, required: true },
+  crash_sensors: { type: Array, default: [] }
 });
 
 

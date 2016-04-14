@@ -19,7 +19,9 @@ angular.module('MyApp')
           });
         }
         $scope.data = processVechicleData(response.data, 'Speed / mph', 'Pedal position');
-        console.log($scope.data);
+        $scope.crash = response.crash;
+        console.log($scope.crash.crash_sensors);
+
         drawTheAmazingMap(response);
       }).catch(function(err) {
         showPopup('Could not get crash data', err.data.message, function() {

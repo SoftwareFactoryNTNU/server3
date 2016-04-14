@@ -29,7 +29,6 @@ var routes = function(app) {
    */
 
   app.put('/api/register_new_pi', function(req, res) {
-    console.log(req.body);
     var short = shortid.generate();
     var newPi = new Pi({
       secret_code: short,
@@ -145,7 +144,9 @@ app.post('/api/connect_user_to_pi',auth.ensureAuthenticated, function(req, res) 
       if (!pi) {
         return res.status(406).send({ message: 'There is no PI unit connected to this secret code', status: 2004 });
       }
-      console.log(pi);
+      if (pi.owner_id) {
+        return res.status(406).send({ message: 'There is already a user connected to this PI', status: 2004 });
+      }
       pi.owner_id = req.user;
       pi.save(function(err) {
         if (err) {
@@ -273,7 +274,11 @@ app.post('/api/add_data', function(req, res) {
 
 
 app.post('/api/add_bulk_data', function(req, res) {
-  console.log(req.body);
+
+  if (req.body.lines[0].pi_id == null || req.body.lines[0].pi_id == undefined || req.body.lines[0].pi_id == '') {
+    return res.status(406).send({ message: 'Invalid data.' });
+  }
+
   Pi.findOne({ pi_id: req.body.lines[0].pi_id }, function(err, pi) {
     if (err) {
       throw err;
@@ -295,7 +300,10 @@ app.post('/api/add_bulk_data', function(req, res) {
     var newCrash = new Crash({
       pi_id: req.body.lines[0].pi_id,
       date_happened: req.body.lines[req.body.lines.length - 1].timestamp,
-      weather: summary
+      weather: summary,
+      latitude: req.body.lines[req.body.lines.length - 1].latitude,
+      longitude: req.body.lines[req.body.lines.length - 1].longitude,
+      crash_sensors: generateCrashSensorArray()
     });
     newCrash.save(function(err) {
       if (err) {
@@ -333,6 +341,18 @@ app.post('/api/add_bulk_data', function(req, res) {
   });
 });
 
+function generateCrashSensorArray() {
+  var number_of_sensors = Math.floor((Math.random() * 3) + 1);
+  console.log(number_of_sensors);
+  var crash_sensor_array = [];
+  var start_number = Math.floor((Math.random() * (8 - number_of_sensors)) + 1);
+  console.log(start_number);
+  for (i = 0; i < number_of_sensors; i++) {
+    crash_sensor_array.push(start_number + i);
+  }
+  console.log(crash_sensor_array);
+  return crash_sensor_array;
+}
 
   app.get('/', function(req, res) {
     res.render('index.html');

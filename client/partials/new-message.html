@@ -207,6 +207,7 @@
         </div>
         </md-content>
       </md-tab>
+
       <md-tab label="WEATHER">
         <md-content class="md-padding">
           <div>
@@ -217,6 +218,26 @@
               <p>{{weather.from}}</p>
             </div>
         </div>
+      </md-content>
+    </md-tab>
+      <md-tab label="crash sensors">
+        <md-content class="md-padding">
+          <div class="row">
+            <div class="col-sm-12">
+              <div style = "display:block;margin:auto;height:500px;position:relative;">
+                <img src="assets/caroverview.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(1) != -1" src="assets/top.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(2) != -1" src="assets/top-left.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(3) != -1" src="assets/left.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(4) != -1" src="assets/bottom-left.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(5) != -1" src="assets/bottom.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(6) != -1" src="assets/bottom-right.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(7) != -1" src="assets/right.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+                <img ng-if = "crash.crash_sensors.indexOf(8) != -1" src="assets/top-right.png" style = "height:100%;width:auto;position:absolute;" alt="" />
+              </div>
+            </div>
+          </div>
+
         </md-content>
       </md-tab>
     </md-tabs>

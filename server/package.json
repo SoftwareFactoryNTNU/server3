@@ -20,5 +20,8 @@
     "randomstring": "^1.1.4",
     "request": "^2.58.0",
     "shortid": "^2.2.4"
+  },
+  "devDependencies": {
+    "supertest": "^1.2.0"
   }
 }

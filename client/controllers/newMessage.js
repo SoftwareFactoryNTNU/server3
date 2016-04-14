@@ -1,7 +1,7 @@
 angular.module('MyApp')
   .controller('NewMessageCtrl', function($scope, $alert, $auth, $state, Account, $mdDialog, $timeout, $interval, uiGmapGoogleMapApi, Note, $mdMedia) {
 
-    var weatherCrash = "Maby snowy or foggy or dry"
+    $scope.weather = "Maby snowy or foggy or dry"
     if ($state.get('admin.newmessage').data != undefined) {
       $scope.data = $state.get('admin.newmessage').data;
       Account.getSingleCrash({
@@ -9,7 +9,15 @@ angular.module('MyApp')
       }).success(function(response) {
         console.log(response)
         console.log("---------------------")
-        weatherCrash = response.crash.weather;
+        //weatherCrash = response.crash.weather;
+        $scope.weather = response.crash.weather;
+
+        if(!$scope.$$phase) {
+          //$digest or $apply
+          $scope.$apply(function() {
+              $scope.weather = response.crash.weather;
+          });
+        }
         $scope.data = processVechicleData(response.data, 'Speed / mph', 'Pedal position');
         console.log($scope.data);
         drawTheAmazingMap(response);
@@ -23,6 +31,7 @@ angular.module('MyApp')
 
     Account.getProfile().success(function(response) {
       console.log(response);
+      $scope.personalData = response;
     }).catch(function(err) {
       console.log(err);
     })
@@ -61,6 +70,8 @@ angular.module('MyApp')
     $scope.getWeatherOfCrash = function() {
       return weatherCrash;
     }
+
+
 
     $scope.respond = function() {
       $scope.data.respond = !$scope.data.respond;
@@ -226,13 +237,11 @@ angular.module('MyApp')
         };
 
         $scope.getPerson = function(pnumber) {
-          /*if (pnumber==$scope.personalData._id){
+          if (pnumber==$scope.personalData._id){
             return $scope.personalData.email
           } else {
             console.log("error")
           }
-          */
-          return "bjarne"
         }
 
         $scope.getTimeMongo = function(_id){
@@ -306,10 +315,11 @@ angular.module('MyApp')
     $timeout($scope.animateCar($scope.map.markers[0], cords, 50), 1000);
   }
 
-
-
       uiGmapGoogleMapApi.then(function(maps) {
-
+        var shape = {
+          coords: [1, 1, 1, 20, 18, 20, 18, 1],
+          type: 'poly'
+        };
         $scope.map = {
               center: {latitude: $scope.map_coordinates[0][0],longitude: $scope.map_coordinates[0][1]},
               zoom: 17,
@@ -321,8 +331,27 @@ angular.module('MyApp')
                 id: '123',
                 latitude: $scope.map_coordinates[0][0],
                 longitude: $scope.map_coordinates[0][1]
+              },
+              {
+                id: '199',
+                latitude: $scope.map_coordinates[$scope.map_coordinates.length-1][0],
+                longitude: $scope.map_coordinates[$scope.map_coordinates.length-1][1],
+                icon:'//developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+
               }]
           };
+
+/*
+          var mar = new google.maps.Marker({
+                id: '888',
+                position: new google.maps.LatLng($scope.map_coordinates[$scope.map_coordinates.length-1][0], $scope.map_coordinates[$scope.map_coordinates.length-1][1]),
+                map: $scope.map,
+                animation: google.maps.Animation.DROP,
+                title: "booom"
+            });
+          $scope.markers.push(mar
+*/
+
 
         console.log("uiGmapGoogleMapApi has been loaded")
         var myLatLng = [];
@@ -354,11 +383,11 @@ angular.module('MyApp')
           //console.log("!");
           // // the future is here - in this method
         }
-
+        var target = 1;
         $scope.animateCar = function(marker, cords, km_h){
           console.log("this is the cords!!!")
           console.log(cords)
-          var target = 1;
+
           var km_h = speedArray[target];
           var delay = 100;//100;
           //cords.push([startPos[0], startPos[1]]);
@@ -367,19 +396,13 @@ angular.module('MyApp')
             var lat = $scope.map.markers[0].latitude;
             var lng = $scope.map.markers[0].longitude;
 
-            var step = (km_h * 1000 * delay *100) / 3600000 // pga feil i fart er det + *100
+            var step = (km_h * 1000 * delay * 100) / 3600000; // pga feil i fart er det + *100
             $scope.updateInfo();
             var dest = new google.maps.LatLng(cords[target][0], cords[target][1]);
             var start = new google.maps.LatLng(cords[target-1][0], cords[target-1][1]);
-            console.log("target: "+cords[target][0] + ":" + cords[target][1])
-            console.log("start: "+cords[target-1][0] + ":" + cords[target-1][1])
             var distance = google.maps.geometry.spherical.computeDistanceBetween(
               dest, start); //in meters
-              console.log(distance);
-              //if (isNaN(step)) { step = 1;}
               var numStep = distance / step;
-              //if (numStep>=500) { numStep = 90;}
-              console.log("number of steps: " + numStep + " - dist: "+  distance +" - step"+ step)
               var i = 0;
               var deltaLat = (cords[target][0] - lat) / numStep;
               var deltaLng = (cords[target][1] - lng) / numStep;
@@ -392,21 +415,21 @@ angular.module('MyApp')
                   $scope.map.markers[0].latitude = lat;
                   $scope.map.markers[0].longitude = lng;
 
-                  first = $interval($scope.moveMarker, delay, 1); //setTimeout(moveMarker, delay); - $timeout is setTimeout in angular
+                  var first = $interval($scope.moveMarker, delay, 1); //setTimeout(moveMarker, delay); - $timeout is setTimeout in angular
                 }
                 else{
                   //$scope.map.markers[0].setPosition(dest); //easy method depricated because fuu
                   $scope.map.markers[0].latitude = cords[target][0];
                   $scope.map.markers[0].longitude = cords[target][1];
                   target += 1;
-                  km_h = speedArray[target];
+                  km_h = 40;//speedArray[target];
                   //updateInfo();
                   if (target == cords.length){
                     target = 1;
-                    km_h = speedArray[0];
+                    km_h = 40; //speedArray[target];
                     $scope.updateInfo();
                   }
-                  secound = $interval($scope.goTo, delay, 1);//setTimeout(goTo, delay);
+                  var secound = $interval($scope.goTo, delay, 1);//setTimeout(goTo, delay);
                 }
               }
               $scope.moveMarker();
@@ -414,15 +437,42 @@ angular.module('MyApp')
           $scope.goTo();
         }
 
+        $scope.restartAnimation = function() {
+          target = 1;
+          console.log("try to restart map")
+        }
+
         /**
          * methods for recentering the map (need to bee done periodicaly and after 1 sec(this seems to work(shit))) *
          **/
-        $timeout(function(){
-          $scope.map.center = {latitude: $scope.map.markers[0].latitude, longitude: $scope.map.markers[0].longitude};
-        }, 1000);
-        $interval( function(){
-          $scope.map.center = {latitude: $scope.map.markers[0].latitude, longitude: $scope.map.markers[0].longitude};
-        }, 5000);
+           $timeout(function(){
+            if (centerMap==true){$scope.map.center = {latitude: $scope.map.markers[0].latitude, longitude: $scope.map.markers[0].longitude};  }
+            $scope.map.markers[1].latitude = cords[cords.length-1][0];
+            $scope.map.markers[1].longitude = cords[cords.length-1][1];
+          }, 1000);
+
+          var centerMap = $interval( function(){
+            $scope.map.center = {latitude: $scope.map.markers[0].latitude, longitude: $scope.map.markers[0].longitude};
+          }, 5000);
+
+          $scope.toggleCenter = function() {
+            if (angular.isDefined(centerMap)) {
+              $interval.cancel(centerMap);
+              centerMap = undefined;
+            } else {
+               centerMap = $interval( function(){
+                $scope.map.center = {latitude: $scope.map.markers[0].latitude, longitude: $scope.map.markers[0].longitude};
+              }, 5000);
+            }
+          };
+
+          $scope.toggle = {
+            cb1: true
+          };
+          $scope.message = 'false';
+          $scope.onChange = function(cbState) {
+            $scope.message = cbState;
+          };
 
         //TESTS for geometry library
         /*

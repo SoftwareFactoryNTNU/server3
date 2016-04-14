@@ -97,19 +97,22 @@
         <md-content class="md-padding">
           <div class="row">
             <div class="col-sm-12">
-              <p>{{getWeatherOfCrash()}}</p>
-              <p>{{getWeatherOfCrash.teperature}}</p>
-
               <ui-gmap-google-map center="map.center" zoom="17" draggable="true" events="map.events">
-                <ui-gmap-markers models="map.markers" coords="'self'"></ui-gmap-markers>
+                <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'">
+                  </ui-gmap-markers>
             <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
                      geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
             </ui-gmap-google-map>
-
-            <button ng-click="restartAnimation()" type="button" class="btn btn-primary">Restart animation</button>
-
-          </div>
-          </div>
+            <br>
+            <div layout="row" layout-align="center center">
+              <md-button ng-click="restartAnimation()" type="button" class="md-raised md-primary">Restart animation</md-button>
+              <!--<button ng-click="toggleCenter()" type="button" class="btn btn-primary">Toggle follow car</button>-->
+              <md-switch class="md-primary" ng-model="toggle.cb1" ng-click="toggleCenter()" aria-label="Switch 1">
+                Center map
+              </md-switch>
+            </div>
+          </div><!--class="col-sm-12" -->
+        </div><!--class="row" -->
         </md-content>
       </md-tab>
       <md-tab label="SPEED">
@@ -200,6 +203,18 @@
               </li>
               </ul>
               </div>
+            </div>
+        </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="WEATHER">
+        <md-content class="md-padding">
+          <div>
+            <div>
+              <p>{{weather.icon}}</p>
+              <p>{{weather.temperature}}</p>
+              <p>{{weather.rain}}</p>
+              <p>{{weather.from}}</p>
             </div>
         </div>
         </md-content>

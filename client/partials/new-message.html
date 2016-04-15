@@ -104,12 +104,19 @@
                      geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
             </ui-gmap-google-map>
             <br>
-            <div layout="row" layout-align="center center">
-              <md-button ng-click="restartAnimation()" type="button" class="md-raised md-primary">Restart animation</md-button>
-              <!--<button ng-click="toggleCenter()" type="button" class="btn btn-primary">Toggle follow car</button>-->
-              <md-switch class="md-primary" ng-model="toggle.cb1" ng-click="toggleCenter()" aria-label="Switch 1">
-                Center map
-              </md-switch>
+            <div class="row">
+                  <div class="col-xs-12 col-sm-3">
+                    <h3 class="md-display-1" style="display: inline;">{{km_h.toFixed(2)}} </h3><h4 <h3 class="md-subhead" style="display: inline;"> km/h</h4>
+                  </div>
+                  <div class="col-xs-12 col-sm-3" >
+                    <md-button ng-click="restartAnimation()" type="button" class="md-raised md-primary">Restart animation</md-button>
+                    <!--<button ng-click="toggleCenter()" type="button" class="btn btn-primary">Toggle follow car</button>-->
+                  </div>
+                  <div class="col-xs-12 col-sm-3">
+                    <md-switch class="md-primary" ng-model="toggle.cb1" ng-click="toggleCenter()" aria-label="Switch 1">
+                      Center map
+                    </md-switch>
+                  </div>
             </div>
           </div><!--class="col-sm-12" -->
         </div><!--class="row" -->

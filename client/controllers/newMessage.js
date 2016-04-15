@@ -298,7 +298,7 @@ angular.module('MyApp')
   console.log("hello");
   var cords = [[63.568138,10.295417],[63.314919,10.752056],[63.108749,11.5345],[63.086418,11.648694],[63.827442,10.371333],[62.961193,10.090278],[62.743168,9.291194],[63.122833,10.591667],[63.123749,9.443389],[63.210278,10.70875],[63.016499,10.958944],[63.163502,10.526361],[62.112194,11.48656],[63.019974,9.197861],[63.328529,11.027583],[63.390305,11.418528],[63.141998,11.722361],[63.147141,9.11575],[62.876141,9.661972],[62.821918,10.608694],[62.7085,9.800861],[62.412193,11.18656],[62.550045646,12.050345356]];
   $scope.map_coordinates = cords;
-  var speedArray = [55, 48, 49, 50, 50, 51, 48, 50, 50, 48, 51, 52, 54, 55, 55, 55, 56, 56, 55, 54, 57, 55, 54, 55, 54, 56, 56, 56, 56, 54, 56, 56, 54, 56, 55, 54, 56, 56, 54];
+  $scope.speedArray = [55, 48, 49, 50, 50, 51, 48, 50, 50, 48, 51, 52, 54, 55, 55, 55, 56, 56, 55, 54, 57, 55, 54, 55, 54, 56, 56, 56, 56, 54, 56, 56, 54, 56, 55, 54, 56, 56, 54];
 
   function drawTheAmazingMap(crashData) {
     // draw the map!
@@ -384,13 +384,15 @@ angular.module('MyApp')
         $scope.updateInfo = function(){
           //console.log("!");
           // // the future is here - in this method
+          getSpeed();
         }
         var target = 1;
+        $scope.km_h = 0;
         $scope.animateCar = function(marker, cords, km_h){
           console.log("this is the cords!!!")
           console.log(cords)
 
-          var km_h = speedArray[target];
+          $scope.km_h = speedArray[target];
           var delay = 100;//100;
           //cords.push([startPos[0], startPos[1]]);
           //console.log(cords);
@@ -398,7 +400,7 @@ angular.module('MyApp')
             var lat = $scope.map.markers[0].latitude;
             var lng = $scope.map.markers[0].longitude;
 
-            var step = (km_h * 1000 * delay * 100) / 3600000; // pga feil i fart er det + *100
+            var step = (($scope.km_h * 1000 * delay * 100 ) / 3600000) + 1; // pga feil i fart er det + *100
             $scope.updateInfo();
             var dest = new google.maps.LatLng(cords[target][0], cords[target][1]);
             var start = new google.maps.LatLng(cords[target-1][0], cords[target-1][1]);
@@ -424,11 +426,18 @@ angular.module('MyApp')
                   $scope.map.markers[0].latitude = cords[target][0];
                   $scope.map.markers[0].longitude = cords[target][1];
                   target += 1;
-                  km_h = 40;//speedArray[target];
+                  $scope.km_h = speedArray[target];
+                  //console.log(speedArray.length - target)
+                  //console.log(cords.length - target)
+                  //console.log(km_h);
+                  if(!$scope.$$phase) {
+                    //$digest or $apply
+                    $scope.$apply();
+                  }
                   //updateInfo();
                   if (target == cords.length){
                     target = 1;
-                    km_h = 40; //speedArray[target];
+                    $scope.km_h = speedArray[target];
                     $scope.updateInfo();
                   }
                   var secound = $interval($scope.goTo, delay, 1);//setTimeout(goTo, delay);
@@ -437,6 +446,16 @@ angular.module('MyApp')
               $scope.moveMarker();
           }
           $scope.goTo();
+        }
+
+        $scope.currentSpeed = 0;
+        function getSpeed()  {
+          if(!$scope.$$phase) {
+            //$digest or $apply
+            $scope.$apply(function() {
+                $scope.km_h = speedArray[target];
+            });
+          }
         }
 
         $scope.restartAnimation = function() {

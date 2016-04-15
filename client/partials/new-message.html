@@ -97,7 +97,8 @@
         <md-content class="md-padding">
           <div class="row">
             <div class="col-sm-12">
-              <ui-gmap-google-map center="map.center" zoom="17" draggable="true" events="map.events">
+              <md-progress-linear ng-show="initializeMap" md-mode="indeterminate"></md-progress-linear>
+              <ui-gmap-google-map ng-if="!initializeMap" center="map.center" zoom="17" draggable="true" events="map.events" ng-style="myStyle">
                 <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'">
                   </ui-gmap-markers>
             <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
@@ -219,10 +220,10 @@
         <md-content class="md-padding">
           <div>
             <div>
+              <h4 class="md-subhead">Weather report for {{weather.from.toString()}}</h4>
               <p>{{weather.icon}}</p>
               <p>{{weather.temperature}}</p>
               <p>{{weather.rain}}</p>
-              <p>{{weather.from}}</p>
             </div>
         </div>
       </md-content>

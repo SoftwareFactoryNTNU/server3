@@ -18,7 +18,7 @@ textarea {
     background-color: #003300;
 }
 .angular-google-map {
-    height: 400px;
+
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -413,15 +413,18 @@ box-shadow: none !important;
 
 
 .angular-google-maps-container {
-    height: 400px;
+
+    overflow: visible;
 }
 
 
 
 ui-gmap-google-map {
-height: 400px;
+
 background-color: #003300;
+overflow: visible;
 }
 ui-gmap-google-map.ng-isolate-scope.angular-google-map {
-height: 400px;
+
+overflow: visible;
 }

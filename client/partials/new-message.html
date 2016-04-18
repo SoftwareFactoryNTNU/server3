@@ -97,6 +97,7 @@
         <md-content class="md-padding">
           <div class="row">
             <div class="col-sm-12">
+              <h3 ng-show="initializeMap" class="md-subhead" style="display: inline;"> Reconstructing crash...</h3>
               <md-progress-linear ng-show="initializeMap" md-mode="indeterminate"></md-progress-linear>
               <ui-gmap-google-map ng-if="!initializeMap" center="map.center" zoom="17" draggable="true" events="map.events" ng-style="myStyle">
                 <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'">
@@ -105,7 +106,7 @@
                      geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
             </ui-gmap-google-map>
             <br>
-            <div class="row">
+            <div class="row" ng-if="!initializeMap">
                   <div class="col-xs-12 col-sm-3">
                     <h3 class="md-display-1" style="display: inline;">{{km_h.toFixed(2)}} </h3><h4 <h3 class="md-subhead" style="display: inline;"> km/h</h4>
                   </div>
@@ -126,6 +127,7 @@
       <md-tab label="SPEED">
         <md-content class="md-padding">
           <div>
+
             <div>
                 <nvd3 options="options" data="data"></nvd3>
             </div>
@@ -224,6 +226,8 @@
               <p>{{weather.icon}}</p>
               <p>{{weather.temperature}}</p>
               <p>{{weather.rain}}</p>
+              <p>Wind direction: {{weather.windDirection.name}}</p>
+              <p>Wind speed: {{weather.windSpeed.mps}} mps</p>
             </div>
         </div>
       </md-content>

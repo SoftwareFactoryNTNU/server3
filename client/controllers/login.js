@@ -14,7 +14,7 @@ angular.module('MyApp')
             type: 'material',
             duration: 3
           });
-          $state.go('admin.calendar');
+          $state.go('admin.patients');
         })
         .catch(function(response) {
           if (response.status == 402) {

@@ -1,5 +1,5 @@
 angular.module('MyApp')
-.controller('MasterCtrl', function($scope, $alert, $auth, $cookieStore, $timeout, $rootScope, Account) {
+.controller('MasterCtrl', function($scope, $alert, $auth, $cookieStore, $timeout, $rootScope, Account, $state) {
   console.log('MasterCtrl');
 
   $rootScope.$on('$stateChangeStart',
@@ -33,6 +33,11 @@ function(event, toState, toParams, fromState, fromParams){
     $scope.getWidth = function() {
         return window.innerWidth;
     };
+
+    $scope.getCurrentState = function() {
+      console.log($state.current.name);
+      return $state.current.name;
+    }
 
     $scope.$watch($scope.getWidth, function(newValue, oldValue) {
         if (newValue >= mobileView) {

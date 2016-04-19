@@ -10,10 +10,10 @@
         </a>
       </li>
       <li class="sidebar-title"><span>NAVIGATION</span></li>
-      <li class="sidebar-list" style = "width:100%;">
+      <li ng-class="{true: 'sidebar-list item-selected', false: 'sidebar-list'}[getCurrentState() == 'admin.patients']" style = "width:100%;">
         <a href="#/admin/patients">My EasyCrash Units <span class="menu-icon fa fa-suitcase"></span></a>
       </li>
-      <li class="sidebar-list" style = "width:100%;">
+      <li ng-class="{true: 'sidebar-list item-selected', false: 'sidebar-list'}[getCurrentState() == 'admin.messages']" style = "width:100%;">
         <a href="#/admin/messages">All crashes <span class="menu-icon fa fa-archive"></span></a>
       </li>
     </ul>

@@ -401,7 +401,7 @@ angular.module('MyApp')
             var lat = $scope.map.markers[0].latitude;
             var lng = $scope.map.markers[0].longitude;
 
-            var step = (($scope.km_h * 1000 * delay * 100 ) / 3600000) + 1; // pga feil i fart er det + *100
+            var step = (($scope.km_h * 1000 * delay) / 3600000) + 1; // pga feil i fart er det + *100
             $scope.updateInfo();
             var dest = new google.maps.LatLng(cords[target][0], cords[target][1]);
             var start = new google.maps.LatLng(cords[target-1][0], cords[target-1][1]);

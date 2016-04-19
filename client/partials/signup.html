@@ -27,7 +27,7 @@
               </md-input-container>
               <md-input-container class="md-block">
                 <label>Repeat password</label>
-                <input ng-model="data.password_again" type = "password">
+                <input ng-model="data.password_again" type = "password" ng-keyup="$event.keyCode == 13 && signup()">
               </md-input-container>
               <md-button class="md-raised md-primary" style = "width:93%;" ng-click = "signup();"> Sign Up </md-button>
             </form>

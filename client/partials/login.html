@@ -20,7 +20,7 @@
               </md-input-container>
               <md-input-container class="md-block">
                 <label>Password</label>
-                <input ng-model="data.password" type = "password">
+                <input ng-model="data.password" type = "password" ng-keyup="$event.keyCode == 13 && login()">
               </md-input-container>
               <div class="row">
                 <div class="col-sm-12" style = "text-align:center;">

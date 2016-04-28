@@ -408,7 +408,7 @@ function generateCrashSensorArray() {
        }
         var newNote = new Note({
           user_id: user._id,
-          crash_id: "p",
+          crash_id: req.body.crash_id,
           date: Date.now(),
           txt: req.body.txt
         });

@@ -22,7 +22,8 @@ angular.module('MyApp')
         $scope.data = processVechicleData(response.data, 'Speed / mph', 'Pedal position');
         $scope.crash = response.crash;
         console.log($scope.crash.crash_sensors);
-
+        console.log($scope.crash._id);
+        $scope.refreshNotes();
         drawTheAmazingMap(response);
       }).catch(function(err) {
         showPopup('Could not get crash data', err.data.message, function() {
@@ -189,11 +190,15 @@ angular.module('MyApp')
           Note.getNote()
            .then(function(response) {
              console.log(response);
+             console.log(response.data[0].crash_id);
              //$scope.noteData = response.data;
              $scope.notes_for = [];
              $scope.noteData = {};
              for (var i=0;i<response.data.length;i++){
-                 $scope.notes_for.push(response.data[i])
+                 if ($scope.crash._id==response.data[i].crash_id){
+                    $scope.notes_for.push(response.data[i])
+                 }
+
              }
              //$scope.$$phase || $scope.$apply();
              //$scope.$apply();   //$digest already in progress uhhh...
@@ -206,7 +211,7 @@ angular.module('MyApp')
              showAlert('Could not load note data..')
            })
          }
-         $scope.refreshNotes();
+
 
          $scope.edNote = function(noteData) {
            //var noteData = $scope.noteData.note;
@@ -258,6 +263,7 @@ angular.module('MyApp')
          $scope.updateNote = function(noteData) {
            //var noteData = $scope.noteData.note;
            var noteData = {
+             crash_id: $scope.crash._id,
              txt: noteData.txt
            };
            console.log(noteData);
